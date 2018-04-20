@@ -1,13 +1,17 @@
 const net = require('net');
-const client = new net.Socket();
-client.connect(9001, '0.0.0.0', function(){
+
+const connection = net.createConnection({
+  port: 9001
+}, () => {
   console.log('Connected');
 });
 
-client.on('data', function (data) {
+process.stdin.pipe(connection);
+
+connection.on('data', function (data) {
   console.log(`${data}`);
 });
 
-client.close('close', function(){
+connection.on('end', function () {
   console.log('Connection closed');
 });
