@@ -11,12 +11,14 @@ const server = net.createServer(function (socket) {
   });
 
   socket.on('data', (data) => {
-    console.log(data.toString());
+    console.log(socket.remoteAddress + ' ' + socket.remotePort + ':' + data.toString());
+    let index = clientArr.indexOf(socket);
+    clientArr.splice(index, 1);
     clientArr.forEach(client => {
       client.write(data);
     })
+    clientArr.push(socket);
   })
-  
 });
 
 
