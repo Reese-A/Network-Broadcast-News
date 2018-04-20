@@ -3,7 +3,7 @@ const net = require('net');
 const clientArr = [];
 const server = net.createServer(function (socket) {
   clientArr.push(socket);
-  socket.write('Welcome, new client!');
+  // socket.write('Welcome, new client!');
   console.log(socket.remoteAddress + ':' + socket.remotePort + ' CONNECTED');
 
   socket.on('close', () => {
@@ -11,13 +11,19 @@ const server = net.createServer(function (socket) {
   });
 
   socket.on('data', (data) => {
-    console.log(socket.remoteAddress + ' ' + socket.remotePort + ': ' + data.toString().trim());
-    let index = clientArr.indexOf(socket);
-    clientArr.splice(index, 1);
-    clientArr.forEach(client => {
-      client.write(data);
-    })
-    clientArr.push(socket);
+    if (socket.user) {
+      console.log(`${socket.user.toString().trim()}: ${data.toString().trim()}`);
+      let index = clientArr.indexOf(socket);
+      clientArr.splice(index, 1);
+      clientArr.forEach(client => {
+        return client.write(`${socket.user.toString().trim()}: ${data.toString().trim()}`);
+      })
+      clientArr.push(socket);
+    } else {
+      socket.user = data.toString().trim();
+      console.log(`New user: ${socket.user}`);
+      // console.log(clientArr);
+    }
   })
 });
 

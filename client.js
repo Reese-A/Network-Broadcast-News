@@ -6,10 +6,13 @@ const connection = net.createConnection({
   console.log('Connected');
 });
 
-process.stdin.pipe(connection);
+// process.stdin.pipe(connection);
+process.stdin.on('data', function(data){
+  connection.write(data.toString().trim());
+});
 
 connection.on('data', function (data) {
-  console.log(`${data.toString().trim()}`);
+  console.log(data.toString().trim());
 });
 
 connection.on('end', function () {
