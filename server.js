@@ -11,7 +11,7 @@ const server = net.createServer(function (socket) {
   });
 
   socket.on('data', (data) => {
-    console.log(socket.remoteAddress + ' ' + socket.remotePort + ':' + data.toString());
+    console.log(socket.remoteAddress + ' ' + socket.remotePort + ': ' + data.toString().trim());
     let index = clientArr.indexOf(socket);
     clientArr.splice(index, 1);
     clientArr.forEach(client => {

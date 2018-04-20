@@ -9,7 +9,7 @@ const connection = net.createConnection({
 process.stdin.pipe(connection);
 
 connection.on('data', function (data) {
-  console.log(`${data}`);
+  console.log(`${data.toString().trim()}`);
 });
 
 connection.on('end', function () {
